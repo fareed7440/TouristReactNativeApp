@@ -4,23 +4,29 @@ import React, { Component } from 'react';
 import MapView from 'react-native-maps';
 import {
   AppRegistry,
-  StyleSheet,
+  StyleSheet, Dimensions,
   Text, Button,
   View, TouchableOpacity, Image
 } from 'react-native';
-
+ const { width, height } = Dimensions.get('window');
+    const ASPECT_RATIO = width / height;
+const LATITUDE = 24.8615;
+const LONGITUDE = 67.0099;
+const LATITUDE_DELTA = 0.06;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const SPACE = 0.01;
 export default class Maps extends Component {
 
   constructor(props) {
     super(props);
     this.state = 
     {
-  
+       SPACE : 0.01,
        latitude: null,
       longitude: null,
       error: null,
-      mapSnapshot: '',
-      
+      mapSnapshot: null,
+      takeSnapshot : {},
 
       region: {
         latitude: 24.8615,
@@ -29,8 +35,10 @@ export default class Maps extends Component {
         longitudeDelta: 0.06,
       }
     }
+   
+
     this.onRegionChange = this.onRegionChange.bind(this)
-    this.takeSnapshot = this.takeSnapshot.bind(this);
+    this.TakeSnapshot = this.TakeSnapshot.bind(this);
     //this.getInitialState = this.getInitialState.bind(this)
   }
 
@@ -54,7 +62,7 @@ export default class Maps extends Component {
                     },
                 });
             },
-            (error) => alert(JSON.stringify(error)),
+            (error) =>(error),
             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
         );
  }
@@ -107,19 +115,16 @@ export default class Maps extends Component {
   // componentWillUnmount() {
   //   navigator.geolocation.clearWatch(this.watchID);
   // }
-  takeSnapshot() {
-    // 'takeSnapshot' takes a config object with the
-    // following options
-    const snapshot = this.maps.takeSnapshot({
-      width: 300,      // optional, when omitted the view-width is used
-      height: 300,     // optional, when omitted the view-height is used
-      // iOS only, optional region to render
-      format: 'png',   // image formats: 'png', 'jpg' (default: 'png')
-      quality: 0.8,    // image quality: 0..1 (only relevant for jpg, default: 1)
-      result: 'file'   // result types: 'file', 'base64' (default: 'file')
-    });
-    snapshot.then((uri) => {
-      this.setState({ mapSnapshot: uri });
+  TakeSnapshot() {
+    this.map.takeSnapshot(300, 300, {
+      latitude: this.state.region.latitude -this.state.SPACE,
+      longitude: this.state.region.longitude - this.state.SPACE,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01 * ASPECT_RATIO,
+    }, (err, data) => {
+      if (err) console.log(err);
+      console.log('data',data)
+      this.setState({ mapSnapshot: data });
     });
   }
 
@@ -136,6 +141,7 @@ export default class Maps extends Component {
     return (
       <View style={styles.container}>
         <MapView style={styles.map}
+          ref={ref => { this.map = ref; }}
           provider="google"
           showsUserLocation={true}
          // showsMyLocationButton={true}
@@ -170,12 +176,23 @@ export default class Maps extends Component {
           <Text>Latitude: {this.state.region.latitude}</Text>
           <Text>Longitude: {this.state.region.longitude}</Text>
           {this.state.error ? <Text>Error: {this.state.error}</Text> : null}
+           <TouchableOpacity
+            onPress={() => this.TakeSnapshot()}
+          >
+            <Text>Take snapshot</Text>
+          </TouchableOpacity>
         </View>
-         <Image source={{ uri: this.state.mapSnapshot.uri }} />
-        <TouchableOpacity onPress={this.takeSnapshot}>
-          <Text>Take Snapshot</Text>
-        </TouchableOpacity> 
-
+       {this.state.mapSnapshot &&
+          <TouchableOpacity
+            style={[styles.container, styles.overlay]}
+            onPress={() => this.setState({ mapSnapshot: null })}
+          >
+            <Image
+              source={{ uri: this.state.mapSnapshot.uri }}
+              style={{ width: 300, height: 300 }}
+            />
+          </TouchableOpacity>
+       }
       </View>
     );
   };
