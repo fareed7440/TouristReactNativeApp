@@ -9,11 +9,11 @@ class Routing extends Component{
         return(
  <Router > 
 
-<Scene key = "map">
-     <Scene key="map" component={Maps} hideNavBar = {true} />
+<Scene key = "signupCon">
+     
        <Scene key="signupCon" component={SignUpCon} hideNavBar = {true} />
           <Scene key="loginCon" component={LoginCon} hideNavBar = {true} />
-           
+           <Scene key="map" component={Maps} hideNavBar = {true} />
         
             </Scene>
 

@@ -7,7 +7,6 @@ import flagBlueImg from '../images/add.png'
 import flagPinkImg from '../images/add.png'
 import { Container, Header, Content, Button,Text,Card, CardItem,Body,Icon } from 'native-base';
 
-//var {GooglePlacesAutocomplete} = require('react-native-google-places-autocomplete');
 import {
   AppRegistry,
   StyleSheet, Dimensions,
@@ -21,8 +20,6 @@ const LONGITUDE = 67.0099;
 const LATITUDE_DELTA = 0.06;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
-// const homePlace = {description: 'Home', geometry: { location: { lat:  24.8615, lng:67.0099 } }};
-// const workPlace = {description: 'Work', geometry: { location: { lat: 24.8615, lng: 67.0099 } }};
 
 export default class Maps extends Component {
 
@@ -68,7 +65,7 @@ export default class Maps extends Component {
        })
     
     })
-    .catch(error => console.log(error.message));  // error is a Javascript Error object 
+    .catch(error => console.log(error.message));   
   }
 
   componentDidMount() {
@@ -143,18 +140,7 @@ export default class Maps extends Component {
 
           onRegionChange={this.onRegionChange}
  />
-   {/* <MapView.Marker
-            onPress={() => this.setState({ marker1: !this.state.marker1 })}
-            coordinate={{
-              latitude: LATITUDE + SPACE,
-              longitude: LONGITUDE + SPACE,
-            }}
-            centerOffset={{ x: -18, y: -60 }}
-            anchor={{ x: 0.69, y: 1 }}
-          //  image={this.state.marker1 ? flagBlueImg : flagPinkImg}
-          >
-          <Text style={styles.marker}>X</Text>
-          </MapView.Marker> */}
+
         <TouchableOpacity
           style={styles.button}
          
@@ -183,9 +169,7 @@ export default class Maps extends Component {
             />
           </TouchableOpacity>
        }
-<Card  style={styles.crd}>
-       <Text style = {{color : 'red'}}>Traffic View </Text>
-       </Card>
+
       </View>
     );
   };
