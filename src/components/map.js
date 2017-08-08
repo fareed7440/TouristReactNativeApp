@@ -48,7 +48,11 @@ export default class Maps extends Component {
     this.onRegionChange = this.onRegionChange.bind(this)
     this.TakeSnapshot = this.TakeSnapshot.bind(this);
     this.openSearchModal = this.openSearchModal.bind(this)
+     this.onLogout = this.onLogout.bind(this)
   }
+  onLogout(){
+        this.props.logoutReq()
+    }
    openSearchModal() {
   
     RNGooglePlaces.openAutocompleteModal()
@@ -169,6 +173,10 @@ export default class Maps extends Component {
             />
           </TouchableOpacity>
        }
+
+       <Button style = {{marginLeft:140,backgroundColor : 'transparent'}}
+       onPress = {this.onLogout}
+       ><Text>LogOut</Text></Button>
 
       </View>
     );

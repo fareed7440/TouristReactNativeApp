@@ -12,7 +12,7 @@ var user = {
     name : data.name
 }
 dispatch(LoginRequestSuccess(data))
-Actions.map()
+Actions.logoutCon()
 })
 
 
