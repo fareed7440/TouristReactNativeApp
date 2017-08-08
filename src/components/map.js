@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import MapView from 'react-native-maps';
+var {GooglePlacesAutocomplete} = require('react-native-google-places-autocomplete');
 import {
   AppRegistry,
   StyleSheet, Dimensions,
@@ -15,6 +16,9 @@ const LONGITUDE = 67.0099;
 const LATITUDE_DELTA = 0.06;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
+const homePlace = {description: 'Home', geometry: { location: { lat:  24.8615, lng:67.0099 } }};
+const workPlace = {description: 'Work', geometry: { location: { lat: 24.8615, lng: 67.0099 } }};
+
 export default class Maps extends Component {
 
   constructor(props) {
@@ -140,6 +144,10 @@ export default class Maps extends Component {
 
     return (
       <View style={styles.container}>
+
+  
+
+
         <MapView style={styles.map}
           ref={ref => { this.map = ref; }}
           provider="google"
@@ -169,7 +177,60 @@ export default class Maps extends Component {
 
           onRegionChange={this.onRegionChange}
 
-        />
+        /><GooglePlacesAutocomplete
+        placeholder='Search'
+        minLength={2} // minimum length of text to search
+        autoFocus={false}
+        returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
+        listViewDisplayed='true'    // true/false/undefined
+        fetchDetails={true}
+        renderDescription={(row) => row.description} // custom description render
+        onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
+          console.log("gggg",data);
+          console.log(details);
+        }}
+        getDefaultValue={() => {
+          return ''; // text input default value
+        }}
+        query={{
+          // available options: https://developers.google.com/places/web-service/autocomplete
+          key: 'AIzaSyBOzhToEdr-1I_HXqtuwL2Znx78PkWM5Jo',
+          language: 'en', // language of the results
+          types: '(cities)', // default: 'geocode'
+        }}
+        styles={{
+          description: {
+            fontWeight: 'bold',
+          },
+          predefinedPlacesDescription: {
+            color: '#1faadb',
+          },
+        }}
+
+        currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+        currentLocationLabel="Current location"
+        nearbyPlacesAPI='AIzaSyDKW1BS7osIFkmz7ZLiuqvw3nbO8JyahHY' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+        GoogleReverseGeocodingQuery={{
+          
+   key:'AIzaSyDh3BO7iZWWumRjOn8k3KKTRjM7gYc9LkQ'
+        }  // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
+        }
+        GooglePlacesSearchQuery={{
+          key :'AIzaSyCBltzCiHmIcquqyCvcj2QA27fn44KpPfA',
+          // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
+          rankby: 'distance',
+          types: 'food',
+        }}
+
+
+        filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
+
+        predefinedPlaces={[homePlace, workPlace]}
+
+        debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+       
+        renderRightButton={() => <Text>Custom text after the inputg</Text>}
+      />
 
 
         <View style={{ flexGrow: 1 }}>
@@ -203,8 +264,8 @@ export default class Maps extends Component {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    height: null,
-    width: null,
+    height: 400,
+    width: 400,
     justifyContent: 'flex-end',
     alignItems: 'center',
 
