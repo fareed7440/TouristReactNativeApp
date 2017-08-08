@@ -5,12 +5,13 @@ import MapView from 'react-native-maps';
 import RNGooglePlaces from 'react-native-google-places';
 import flagBlueImg from '../images/add.png'
 import flagPinkImg from '../images/add.png'
+import { Container, Header, Content, Button,Text,Card, CardItem,Body,Icon } from 'native-base';
 
 //var {GooglePlacesAutocomplete} = require('react-native-google-places-autocomplete');
 import {
   AppRegistry,
   StyleSheet, Dimensions,
-  Text, Button,
+
   View, TouchableOpacity, Image
 } from 'react-native';
  const { width, height } = Dimensions.get('window');
@@ -40,14 +41,8 @@ export default class Maps extends Component {
         longitude: 67.0099,
         latitudeDelta: 0.06,
         longitudeDelta:0.06,
+        Address : null
       },
-      // marker: {
-      //   latlng:{
-      //    latitude: null,
-      //    longitude: null,
-      //     latitudeDelta: LATITUDE_DELTA,
-      //     longitudeDelta: LONGITUDE_DELTA
-      //   }
       
     
     
@@ -57,32 +52,21 @@ export default class Maps extends Component {
     this.TakeSnapshot = this.TakeSnapshot.bind(this);
     this.openSearchModal = this.openSearchModal.bind(this)
   }
-
-  // getInitialState() {
-  //   return {
-  //     region: {
-
-  //     },
-  //   };
-  // }
    openSearchModal() {
   
     RNGooglePlaces.openAutocompleteModal()
     .then((place) => {
       console.log('place',place)
-      
-      this.setState({
+       this.setState({
       region : {
         latitude : place.latitude,
         longitude: place.longitude,
         latitudeDelta: 0.06,
         longitudeDelta: 0.06,
+        Address : place.address
       }
        })
     
-      
-        // place represents user's selection from the 
-        // suggestions and it is a simplified Google Place object. 
     })
     .catch(error => console.log(error.message));  // error is a Javascript Error object 
   }
@@ -126,15 +110,11 @@ export default class Maps extends Component {
    
    const {latitude} = this.state.region
      const {longitude} = this.state.region
-    //console.log(region);
 
     return (
       <View style={styles.container}>
 
-  
-
-
-        <MapView style={styles.map}
+  <MapView style={styles.map}
           ref={ref => { this.map = ref; }}
           provider="google"
           showsUserLocation={true}
@@ -177,20 +157,20 @@ export default class Maps extends Component {
           </MapView.Marker> */}
         <TouchableOpacity
           style={styles.button}
-          onPress={() => this.openSearchModal()}
+         
         >
-          <Text>Pick a Place</Text>
+          <Button  onPress={() => this.openSearchModal()}
+          block light>
+            <Text>Search Place</Text>
+          </Button>
         </TouchableOpacity>
 
-        <View style={{ flexGrow: 1 ,marginTop : 550 }}>
+        <View style={{ flexGrow: 1 ,marginTop : 450 }}>
           <Text>Latitude: {latitude}</Text>
           <Text>Longitude: {longitude}</Text>
+         
           {this.state.error ? <Text>Error: {this.state.error}</Text> : null}
-           <TouchableOpacity
-            onPress={() => this.TakeSnapshot()}
-          >
-            <Text>Take snapshot</Text>
-          </TouchableOpacity>
+        
         </View>
        {this.state.mapSnapshot &&
           <TouchableOpacity
@@ -203,6 +183,9 @@ export default class Maps extends Component {
             />
           </TouchableOpacity>
        }
+<Card  style={styles.crd}>
+       <Text style = {{color : 'red'}}>Traffic View </Text>
+       </Card>
       </View>
     );
   };
@@ -213,8 +196,8 @@ export default class Maps extends Component {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    height: 400,
-    width: 400,
+    height: null,
+    width: null,
     justifyContent: 'flex-end',
     alignItems: 'center',
 
@@ -228,62 +211,9 @@ const styles = StyleSheet.create({
     marginTop: 33,
     fontWeight: 'bold',
   },
+  crd: {
+    marginTop : -300,
+    marginLeft : -30
+  }
 });
 
-
-
-  
-  //       <GooglePlacesAutocomplete
-  //       placeholder='Search'
-  //       minLength={2} // minimum length of text to search
-  //       autoFocus={false}
-  //       returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
-  //       listViewDisplayed='true'    // true/false/undefined
-  //       fetchDetails={true}
-  //       renderDescription={(row) => row.description} // custom description render
-  //       onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-  //         console.log("gggg",data);
-  //         console.log(details);
-  //       }}
-  //       getDefaultValue={() => {
-  //         return ''; // text input default value
-  //       }}
-  //       query={{
-  //         // available options: https://developers.google.com/places/web-service/autocomplete
-  //         key: 'AIzaSyBOzhToEdr-1I_HXqtuwL2Znx78PkWM5Jo',
-  //         language: 'en', // language of the results
-  //         types: '(cities)', // default: 'geocode'
-  //       }}
-  //       styles={{
-  //         description: {
-  //           fontWeight: 'bold',
-  //         },
-  //         predefinedPlacesDescription: {
-  //           color: '#1faadb',
-  //         },
-  //       }}
-
-  //       currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-  //       currentLocationLabel="Current location"
-  //       nearbyPlacesAPI='AIzaSyDKW1BS7osIFkmz7ZLiuqvw3nbO8JyahHY' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
-  //       GoogleReverseGeocodingQuery={{
-          
-  //  key:'AIzaSyDh3BO7iZWWumRjOn8k3KKTRjM7gYc9LkQ'
-  //       }  // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
-  //       }
-  //       GooglePlacesSearchQuery={{
-  //         key :'AIzaSyCBltzCiHmIcquqyCvcj2QA27fn44KpPfA',
-  //         // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
-  //         rankby: 'distance',
-  //         types: 'food',
-  //       }}
-
-
-  //       filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-
-  //       predefinedPlaces={[homePlace, workPlace]}
-
-  //       debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-       
-  //       renderRightButton={() => <Text>Custom text after the inputg</Text>}
-  //     />
