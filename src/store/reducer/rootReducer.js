@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux'
+import { combineReducers } from 'redux'
 import SignupReducer from './signupReducer'
 import LoginReducer from './loginReducer'
 import LogoutReducer from './logoutReducer'

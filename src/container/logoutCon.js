@@ -1,22 +1,22 @@
 import Maps from '../components/map'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import logoutRequest from '../store/actions/logoutAct'
-function mapStateToProps(state){
-    return{
+function mapStateToProps(state) {
+    return {
         Logout: state.LogoutReducer
 
     }
-   
-}
-
-function mapDispatchToProps(dispatch){
-return{
-    logoutReq : (data)=>dispatch(logoutRequest(data))
 
 }
+
+function mapDispatchToProps(dispatch) {
+    return {
+        logoutReq: (data) => dispatch(logoutRequest(data))
+
+    }
 }
 
 
 
-MapsCon = connect (mapStateToProps,mapDispatchToProps)(Maps)
+MapsCon = connect(mapStateToProps, mapDispatchToProps)(Maps)
 export default MapsCon;

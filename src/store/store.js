@@ -10,7 +10,7 @@ import Routing from '../routing'
 
 class Store extends Component {
     render() {
-        const store = createStore(rootReducer,{}, applyMiddleware(Reduxthunk));
+        const store = createStore(rootReducer, {}, applyMiddleware(Reduxthunk));
         return (
             <Provider store={store}>
                 <Routing />
