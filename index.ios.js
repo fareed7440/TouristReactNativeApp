@@ -11,6 +11,7 @@ import {
   Text,
   View
 } from 'react-native';
+import Store from './src/store/store'
 
 export default class mapsProject extends Component {
   render() {
@@ -50,4 +51,4 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('mapsProject', () => mapsProject);
+AppRegistry.registerComponent('mapsProject', () => Store);

@@ -14,6 +14,10 @@ function loginRequest(data) {
             dispatch(LoginRequestSuccess(data))
             Actions.logoutCon()
         })
+        .catch((error) => {
+                    dispatch(LoginRequestFailed(error));
+                    alert('given email is not registered')
+                })
  }
 }
 
@@ -27,6 +31,12 @@ function LoginRequestSuccess(data) {
     return {
         type: ActionTypes.LOGIN_REQUEST_SUCCESS,
         data
+    }
+}
+function LoginRequestFailed() {
+    return {
+        type: ActionTypes.LOGOUT_REQUEST_FAILED
+       
     }
 }
 
